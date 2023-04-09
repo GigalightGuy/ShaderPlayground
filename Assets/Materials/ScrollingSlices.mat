@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MyAmazingShaders_MyFirstShader
+  m_Name: ScrollingSlices
   m_Shader: {fileID: 4800000, guid: 288a520792200c142abd3fcd14878954, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []

@@ -1,4 +1,4 @@
-Shader "MyAmazingShaders/MyFirstShader"
+Shader "MyAmazingShaders/ScrollingSlices"
 {
 	Properties
 	{
@@ -11,6 +11,7 @@ Shader "MyAmazingShaders/MyFirstShader"
 
 	SubShader
 	{
+		// Start shader code
 		CGPROGRAM
 
 		#pragma surface surf Lambert 
