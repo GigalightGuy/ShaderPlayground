@@ -16,6 +16,9 @@ Shader "MyAmazingShaders/Zebruh"
 			float3 viewDir;
 		};
 
+		// Function that uses a sin function to get a wave
+		// And a conditional to output 0 or 1 when the wave is negative or positive
+		// Which is one of various ways to get a repeating squared wave function
 		float squareWave(float a, float f)
 		{
 			return sin(a * f) > 0 ? 1 : 0;
