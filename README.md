@@ -8,3 +8,6 @@ Unity shader experimentation
 [Alan Zucconi's Shaders](https://www.alanzucconi.com/category/shader/)  
 [MinionsArt Tutorials](https://minionsart.github.io/tutorials/)  
 [catlikecoding Rendering Series](https://catlikecoding.com/unity/tutorials/rendering/)  
+
+## Unity Shader Documentation
+[Untiy Shaders Cheat Sheet](https://gist.github.com/Split82/d1651403ffb05e912d9c3786f11d6a44)
