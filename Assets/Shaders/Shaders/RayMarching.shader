@@ -35,6 +35,10 @@ Shader "Custom/RayMarching"
             float _SpheresRadius[5];
             int _ActiveSpheres;
 
+            float4 _BoxesPos[5];
+            float4 _BoxesBounds[5];
+            int _ActiveBoxes;
+
             float _MaxDistance, _MaxIterations;
 
             struct appdata 
@@ -77,21 +81,38 @@ Shader "Custom/RayMarching"
             {
                 return Linear01Depth(depth) * (_ProjectionParams.z - _ProjectionParams.y);
             }
-            
-            float circleSDF(float2 p, float r)
-            {
-                return length(p) - r;
-            }
 
             float sphereSDF(float3 p, float r)
             {
                 return length(p) - r;
             }
 
+            float boxSDF(float3 p, float3 b)
+            {
+                float3 q = abs(p) - b;
+                return length(max(q, 0)) + min(max(q.x, max(q.y, q.z)), 0);
+            }
+
+            float roundBoxSDF(float3 p, float3 b, float r)
+            {
+                float3 q = abs(p) - b;
+                return length(max(q, 0)) + min(max(q.x, max(q.y, q.z)), 0) - r;
+            }
+
             float sceneSDF(float3 p)
             {
                 float dist = _MaxDistance;
-                dist = sphereSDF(p - _SpheresPos[0], _SpheresRadius[0]);
+                
+                for (int i = 0; i < _ActiveSpheres; i++)
+                {
+                    dist = min(dist, sphereSDF(p - _SpheresPos[i], _SpheresRadius[i]));
+                }
+
+                for (int i = 0; i < _ActiveBoxes; i++)
+                {
+                    dist = min(dist, boxSDF(p - _BoxesPos[i], _BoxesBounds[i]));
+                }
+
                 return dist;
             }
 
