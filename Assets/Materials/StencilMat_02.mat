@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WireframeMat
-  m_Shader: {fileID: 4800000, guid: ef894872ffc6fae4db166d168717e7aa, type: 3}
+  m_Name: StencilMat_02
+  m_Shader: {fileID: 4800000, guid: c1d84083dfb9e314e96ca108e81530e1, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -22,9 +22,16 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _WireframeSmoothing: 1
-    - _WireframeThickness: 1
-    m_Colors:
-    - _BaseColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-    - _WireframeColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BlendDst: 1
+    - _BlendSrc: 0
+    - _ReadMask: 255
+    - _Stencil: 2
+    - _StencilComp: 8
+    - _StencilFail: 0
+    - _StencilOp: 2
+    - _StencilZFail: 0
+    - _WriteMask: 255
+    - _ZTest: 4
+    - _ZWrite: 0
+    m_Colors: []
   m_BuildTextureStacks: []

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WireframeMat
-  m_Shader: {fileID: 4800000, guid: ef894872ffc6fae4db166d168717e7aa, type: 3}
+  m_Name: BlendDstMat
+  m_Shader: {fileID: 4800000, guid: 79f42fdc8b65e5443a608fd26ef86ce3, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -19,12 +19,12 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 7b6563a9acdc64843b5bab2e5547fd0f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _WireframeSmoothing: 1
-    - _WireframeThickness: 1
-    m_Colors:
-    - _BaseColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-    - _WireframeColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Floats: []
+    m_Colors: []
   m_BuildTextureStacks: []
