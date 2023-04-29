@@ -2,7 +2,7 @@ Shader "Custom/Volume"
 {
     Properties
     {
-        
+        _Density ("Density", Float) = 0.1
     }
 
     SubShader
@@ -16,8 +16,8 @@ Shader "Custom/Volume"
         Pass 
         {
             Blend SrcAlpha OneMinusSrcAlpha
-
             ZTest Less
+            Cull Off
 
             CGPROGRAM
 
