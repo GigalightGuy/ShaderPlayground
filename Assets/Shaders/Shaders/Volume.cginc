@@ -12,7 +12,8 @@ struct Varyings
 {
     float4 positionCS : SV_POSITION;
     float3 positionWS : TEXCOORD0;
-    float3 volumeCenterWS : TEXCOORD1;
+    float4 positionNDC : TEXCOORD1;
+    float3 volumeCenterWS : TEXCOORD2;
 };
 
 struct Ray 
@@ -21,7 +22,22 @@ struct Ray
     float3 direction;
 };
 
-float _Density;
+half3 _Color;
+float _Density, _LargeStep, _SmallStep, _MaxDist;
+
+sampler2D _CameraDepthTexture;
+
+// From https://iquilezles.org/articles/smin/
+float SMinCubic(float a, float b, float k)
+{
+    float h = max(k-abs(a-b), 0.0)/k;
+    return min(a, b) - h*h*h*k*(1.0/6.0);
+}
+
+float SphereSDF(float3 p, float r)
+{
+    return length(p) - r;
+}
 
 float BoxSDF(float3 p, float3 s)
 {
@@ -29,43 +45,59 @@ float BoxSDF(float3 p, float3 s)
     return length(max(vec, 0)) + max(min(vec.x, min(vec.y, vec.z)), 0);
 }
 
-float Raymarch(Ray ray, int maxIter, float maxDist, float3 volumeCenter)
+float RoundBoxSDF(float3 p, float3 s, float r)
 {
-    float progress = 0;
-    int i = 0;
+    float3 vec = abs(p) - s;
+    return length(max(vec, 0)) + max(min(vec.x, min(vec.y, vec.z)), 0) - r;
+} 
 
-    while (i < maxIter)
+float SceneSDF(float3 p)
+{
+    return SMinCubic(RoundBoxSDF(p, float3(2, 0.5, 2), 0.3), SphereSDF(p - float3(0, 1, 0), 1.5), 0.75);
+}
+
+float Raymarch(Ray ray, float3 volumeCenter, float sceneDist)
+{
+    float transmittance = 1;
+    float totalDist = 0;
+
+    while (transmittance > 0.01 && totalDist < _MaxDist)
     {
-        float d = BoxSDF(ray.origin + ray.direction * progress - volumeCenter, 0.5);
+        float3 p = ray.origin + ray.direction * totalDist;
 
-        if (d < EPSILON)
+        float smallStepsToTake = 0;
+        float d = SceneSDF(p);
+
+        if (d < 0)
         {
-            break;
+            totalDist = max(0, totalDist - _LargeStep);
+            p = ray.origin + ray.direction * totalDist;
+            d = SceneSDF(p);
+
+            smallStepsToTake = ceil(_LargeStep / _SmallStep);
+        }
+        else
+        {
+            totalDist += _LargeStep;
         }
 
-        progress += d;
+        while (smallStepsToTake > 0.5 || d < 0)
+        {
+            if (d < 0) transmittance *= exp(-_Density * _SmallStep);
+            
+            totalDist += _SmallStep;
+            
+            if (totalDist > sceneDist) return transmittance;
 
-        i++;
-    }
+            p = ray.origin + ray.direction * totalDist;
+            d = SceneSDF(p);
 
-    float volDist = 0;
-
-    while (i < maxIter)
-    {
-        float d = BoxSDF(ray.origin + ray.direction * progress - volumeCenter, 0.5);
-
-        if (d > EPSILON) break;
+            smallStepsToTake--;
+        }
         
-        volDist += 0.01;
-
-        progress += 0.01;
-
-        i++;
     }
 
-    float luminance = exp(-volDist * _Density);
-
-    return luminance;
+    return transmittance;
 }
 
 Varyings vert(Attributes i)
@@ -73,6 +105,7 @@ Varyings vert(Attributes i)
     Varyings o = (Varyings)0;
     o.positionCS = UnityObjectToClipPos(i.positionOS.xyz);
     o.positionWS = mul(unity_ObjectToWorld, i.positionOS);
+    o.positionNDC = ComputeScreenPos(o.positionCS);
     o.volumeCenterWS = mul(unity_ObjectToWorld, float4(0, 0, 0, 1));
 
     return o;
@@ -81,12 +114,14 @@ Varyings vert(Attributes i)
 half4 frag(Varyings i) : SV_TARGET
 {
     Ray r;
-    r.origin = i.positionWS;
-    r.direction = normalize(-WorldSpaceViewDir(float4(i.positionWS, 1)));
+    r.origin = _WorldSpaceCameraPos;
+    r.direction = normalize(i.positionWS.xyz - _WorldSpaceCameraPos);
 
-    float luminance = Raymarch(r, 250, 100, i.volumeCenterWS);
+    float sceneDist = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.positionNDC.xy / i.positionNDC.w));
 
-    return half4(0, 1, 0, 1 - luminance);
+    float transmittance = Raymarch(r, i.volumeCenterWS, sceneDist);
+
+    return half4(_Color, 1 - transmittance);
 }
 
 #endif

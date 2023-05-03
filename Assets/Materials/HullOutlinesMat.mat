@@ -22,6 +22,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _Animate: 0
     - _OutlineThickness: 0.1
     m_Colors:
     - _OutlineColor: {r: 0.26415092, g: 0, b: 0, a: 1}

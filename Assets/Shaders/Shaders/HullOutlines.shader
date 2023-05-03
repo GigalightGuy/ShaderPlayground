@@ -4,6 +4,8 @@ Shader "Unlit/HullOutlines"
     {
         _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineThickness ("Outline thickness", Float) = 0.1
+
+        [Toggle(_AnimateOutline)] _Animate ("Animate Outline", Float) = 0
     }
 
     SubShader
@@ -56,6 +58,8 @@ Shader "Unlit/HullOutlines"
 
             CGPROGRAM
 
+            #pragma shader_feature _AnimateOutline
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -81,11 +85,16 @@ Shader "Unlit/HullOutlines"
 
                 float3 smoothNormal = UnityObjectToWorldNormal(i.smoothNormalOS);
 
-                float3 pos = mul(unity_ObjectToWorld, i.positionOS).xyz + _OutlineThickness * smoothNormal;
+                float finalOutlineThickness;
+                #if defined(_AnimateOutline)
+                    finalOutlineThickness = _OutlineThickness * (1 + sin(_Time.y));
+                #else
+                    finalOutlineThickness = _OutlineThickness;
+                #endif
 
-                pos = mul(unity_WorldToObject, float4(pos, 1)).xyz;
+                float3 pos = mul(unity_ObjectToWorld, i.positionOS).xyz + finalOutlineThickness * smoothNormal;
 
-                o.positionCS = UnityObjectToClipPos(pos);
+                o.positionCS = UnityWorldToClipPos(pos);
 
                 return o;
             }

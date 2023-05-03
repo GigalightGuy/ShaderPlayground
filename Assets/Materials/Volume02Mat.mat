@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VolumeMat
+  m_Name: Volume02Mat
   m_Shader: {fileID: 4800000, guid: d0583f00232e9db4eb3c3f751a7498c9, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -22,8 +22,11 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Density: 1.5
-    - _SampleInterval: 0.05
+    - _Density: 4
+    - _LargeStep: 0.1
+    - _MaxDist: 20
+    - _SampleInterval: 0.01
+    - _SmallStep: 0.01
     m_Colors:
-    - _Color: {r: 0.06335202, g: 0.34117648, b: 0, a: 1}
+    - _Color: {r: 0.6698113, g: 0, b: 0.5824448, a: 1}
   m_BuildTextureStacks: []

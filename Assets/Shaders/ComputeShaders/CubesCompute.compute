@@ -1,0 +1,33 @@
+#pragma kernel CSMain
+
+RWStructuredBuffer<float> _Positions;
+
+int _CubesPerAxis;
+int _Repetitions;
+float _Time;
+
+float rand(in float2 uv)
+{
+    return frac(sin(dot(uv, float2(12.9898, 78.233) * 2.0)) * 43758.5453) * 2 - 1;
+}
+
+int indexFromId(uint3 id)
+{
+    return id.x + _CubesPerAxis * (id.y + _CubesPerAxis * id.z);
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // Check if this id is in the grid
+    if (id.x > _CubesPerAxis - 1 || id.y > _CubesPerAxis - 1)
+    {
+        return;
+    }
+
+    for (int i = 0; i < _Repetitions; i++)
+    {
+        // Assign random value
+        _Positions[indexFromId(id)] = rand(float2(id.x * _Time, id.y * _Time));
+    }
+}
