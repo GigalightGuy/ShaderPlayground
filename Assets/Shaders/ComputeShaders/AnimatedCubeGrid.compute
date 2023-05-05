@@ -1,0 +1,28 @@
+#pragma kernel CSMain
+
+#define PI 3.14159265358979323846
+
+RWStructuredBuffer<float3> _Positions;
+
+uint _Resolution;
+float _Spacing, _Time;
+
+float3 Wave(float u, float v, float t)
+{
+    float3 p;
+    p.x = u;
+    p.y = sin(PI * (u + v + t));
+    p.z = v;
+    return p;
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x > _Resolution - 1 || id.y > _Resolution - 1)
+    {
+        return;
+    }
+
+    _Positions[id.x + _Resolution * id.y] = Wave(_Spacing * id.x, _Spacing * id.y, _Time);
+}
