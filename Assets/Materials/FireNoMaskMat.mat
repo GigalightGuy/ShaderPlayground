@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FireMat
+  m_Name: FireNoMaskMat
   m_Shader: {fileID: 4800000, guid: 69aa0c7ac51b4d44695112b3b1dc9a58, type: 3}
   m_ValidKeywords:
-  - _TRIPLANAR_OFF
+  - _TRIPLANAR_WORLD
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -22,7 +22,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: afda97479330bca4aade8eaa08c611a5, type: 3}
+        m_Texture: {fileID: 2800000, guid: fd2da509c9184604da912e12c99ce6a4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
@@ -42,12 +42,12 @@ Material:
     - _ColorMultiplier: 1.5
     - _CullMode: 0
     - _DisplacementStrength: 0.1
-    - _FlameHeight: 0.75
+    - _FlameHeight: 0.95
     - _Posterize: 0
     - _PosterizeSteps: 5
     - _ScrollSpeed: 1.5
-    - _Triplanar: 0
-    - _UVScale: 0.1
+    - _Triplanar: 2
+    - _UVScale: 1
     - _VoronoiExponent: 0.5
     m_Colors:
     - _BaseColor: {r: 4.237095, g: 1.2644733, b: 0, a: 1}
