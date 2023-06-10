@@ -46,6 +46,7 @@ Shader "Custom/Metaballs"
                 float4 positionCS : SV_POSITION;
 
                 float3 positionWS : TEXCOORD0;
+                float4 positionSS : TEXCOORD1;
             };
 
             struct Ray
@@ -53,6 +54,8 @@ Shader "Custom/Metaballs"
                 float3 orig;
                 float3 dir;
             };
+
+            uniform sampler _CameraDepthTexture;
 
             half3 _DiffuseColor;
         
@@ -119,13 +122,15 @@ Shader "Custom/Metaballs"
                 return saturate(diffuse + specular + fresnel);
             }
 
-            half4 Raymarch(Ray r)
+            half4 Raymarch(Ray r, float maxDist)
             {
                 float length = 0;
 
                 for (int i = 0; i < 150; i++)
                 {
                     float d = SceneSDF(r.orig + length * r.dir);
+
+                    if (d > maxDist) break;
 
                     if (d < EPSILON)
                     {
@@ -144,6 +149,7 @@ Shader "Custom/Metaballs"
                 
                 o.positionCS = UnityObjectToClipPos(i.positionOS.xyz);
                 o.positionWS = mul(unity_ObjectToWorld, i.positionOS).xyz;
+                o.positionSS = ComputeScreenPos(o.positionCS);
 
                 return o;
             }
@@ -154,8 +160,10 @@ Shader "Custom/Metaballs"
                 r.orig = _WorldSpaceCameraPos;
                 r.dir = normalize(i.positionWS - _WorldSpaceCameraPos);
 
-                half4 col = Raymarch(r);
+                float depth = tex2D(_CameraDepthTexture, i.positionSS.xy / i.positionSS.w).r;
+                depth = LinearEyeDepth(depth);
 
+                half4 col = Raymarch(r, depth);
 
                 return col;
             }

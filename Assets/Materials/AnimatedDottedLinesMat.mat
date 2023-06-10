@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetaballsMat
-  m_Shader: {fileID: 4800000, guid: 26f740b3dd8047844b935725d92867a4, type: 3}
+  m_Name: AnimatedDottedLinesMat
+  m_Shader: {fileID: 4800000, guid: a50901cc201cd59489bd68ead042cea6, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -22,13 +22,13 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _BlendAmount: 0.2
-    - _FresnelPow: 5
-    - _FresnelPower: 1
-    - _SpecularPow: 1000
-    - _SpecularPower: 1
+    - _BoxHalfSize: 0.4435
+    - _BoxRound: 0.0177
+    - _LineLength: 0.025
+    - _LineSpacing: 0.1
+    - _LineWidth: 0.011
+    - _ScrollSpeed: 3
     m_Colors:
-    - _DiffuseColor: {r: 1, g: 0, b: 1, a: 1}
-    - _FresnelColor: {r: 1, g: 0, b: 1, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BackgroundColor: {r: 0.5377358, g: 0.28104305, b: 0.47255942, a: 0.5}
+    - _LineColor: {r: 0.8773585, g: 0.6718972, b: 0.4254361, a: 1}
   m_BuildTextureStacks: []
